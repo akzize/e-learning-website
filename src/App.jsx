@@ -4,22 +4,25 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import Videos from './Chaines/Videos';
 
 
+
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Accueil />,
+    element: <Accueil/>,
   },
   {
     path: "/videos/:id",
     element: <Videos />,
   },
+  
 ]);
 
 const App = () => {
   return (
-    <div className='container1 text-light'>
+    <div className='App text-light'>
       <RouterProvider router={router}>
-       <Accueil/>
+        
+       {/* <Accueil/> */}
       </RouterProvider>
     </div>
   )

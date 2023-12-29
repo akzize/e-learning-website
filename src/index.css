@@ -1,7 +1,7 @@
 .container1{
-  background-image: url("https://cdn.pixabay.com/photo/2017/10/20/01/06/north-star-2869817_1280.jpg");
-
-  background-size: cover;
+  background-image: url("https://www.andromo.com/wp-content/uploads/2022/01/01-Learn-How-to-Code-a-Mobile-app.jpg");
+  background-repeat:  round;
+  backdrop-filter:calc(100);
 
 }
 
@@ -46,7 +46,7 @@ img{
   box-shadow: 5px 2px linear-gradient(8deg, rgb(206, 113, 7) 15%, rgb(184, 158, 11) 66%);
 
   filter: drop-shadow(5px 2px 4px #24b8e6);
-  background: rgb(216, 221, 223);
+  background: rgb(167, 168, 168);
   /* background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgb(51, 29, 253) 50%, rgba(252,176,69,1) 100%); */
 }
 .card-video{
@@ -81,4 +81,24 @@ color: black !important;
 }
 .card-video:hover::before, .card-video:hover::after, .card-video:focus::before, .card-video:focus::after {
   transform: scale3d(1, 1, 1);
+}
+
+/* le style du composant pricipale App */
+.App{
+  color: black;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* logo style */
+
+.logo {
+
+
+  color: #70869d;
+  letter-spacing: .1em;
+  text-shadow: 
+
+    0px 2px 0 #2c2c2c, 
+
+    8px 2px 3px rgba(100, 100, 100, 0.9);
 }

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Editor } from '@tinymce/tinymce-react';
 import { useParams } from 'react-router-dom'
 import CustomiseHook from './CustomiseHook'
 import ReactPlayer from 'react-player'
@@ -44,10 +45,28 @@ const Videos = () => {
                 />
                 <div className='text-bold text-light text-header'>
                     <h3>test title</h3>
-                   et nesciunt! Assumenda sed reprehenderit ducimus similique explicabo eligendi dolores cumque magnam laudantium praesentium. Quod odio voluptatibus perspiciatis impedit harum pariatur, nemo facilis, aperiam asperiores quidem ex beatae porro?
+                    et nesciunt! Assumenda sed reprehenderit ducimus similique explicabo eligendi dolores cumque magnam laudantium praesentium. Quod odio voluptatibus perspiciatis impedit harum pariatur, nemo facilis, aperiam asperiores quidem ex beatae porro?
                     Error porro libero autem blanditiis, facere doloremque vitae culpa laborum maiores aut magni. Voluptatem quae earum fugit inventore assumenda. Quasi error optio similique animi fugiat architecto voluptates, recusandae praesentium eligendi.
-                    
+
                 </div>
+
+
+
+                <Editor
+                    apiKey='vmcqdfrs3qyhxjqg4stnit6qa10kzou1yfp29zmekdtl26cq'
+                    init={{
+                        plugins: 'ai tinycomments mentions anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed permanentpen footnotes advtemplate advtable advcode editimage tableofcontents mergetags powerpaste tinymcespellchecker autocorrect a11ychecker typography inlinecss',
+                        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | align lineheight | tinycomments | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+                        tinycomments_mode: 'embedded',
+                        tinycomments_author: 'Author name',
+                        mergetags_list: [
+                            { value: 'First.Name', title: 'First Name' },
+                            { value: 'Email', title: 'Email' },
+                        ],
+                        ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
+                    }}
+                    initialValue="Votre Notes Ici !"
+                />
 
             </div>
             <div className="col-md-3">
@@ -63,7 +82,9 @@ const Videos = () => {
                                 {play?.snippet.title}
                                 <i className="fa-solid fa-circle-check text-white-50 check ms-2"></i>
                             </p>
-                            {/* <span className='text-light fs-6'>{${play?.statistics.subscriberCount} subscribers}</span> */}
+
+
+
                         </div>
                     ))
                 }

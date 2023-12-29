@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import CustomiseHook from "./CustomiseHook";
 import { Link } from "react-router-dom";
+import Header from "../Master/Header";
+import Footer from "../Master/Footer";
 
 const Accueil = () => {
 
@@ -63,74 +65,97 @@ const Accueil = () => {
 
 
 
-   
 
 
 
- 
+
+
 
 
     return (
-        <div className='conatiner d-flex flex-column justify-content-center p-5 '>
-            <div className="m-3 text-center" >
-
-  <marquee behavior="alternate"><h1><q>Qu'est-ce que tu vas apprendre aujourd'hui ?!</q></h1></marquee>
-
-                
-            </div>
-
-            <input className='form-control p-3 text-center text-primary  rounded-5 border-2 border-warning ' type='text' placeholder="Exemple :  PHP CS5 JS ..." />
-            <div className="conatiner d-flex flex-column justify-content-center p-5 mt-0 m-5">
-
-                <button className="btn btn-outline-success text-light border-light border-3 w-25 align-self-center rounded-5">Rechercher</button>
-            </div>
+        <div >
+            <Header />
+            <div className='conatiner d-flex flex-column justify-content-center pt-5 '>
 
 
+                <div className="container1 d-flex flex-column ">
 
-            <hr className="" /><h1 className="align-self-center mb-5 text-bold"><q>les cours les plus vues</q></h1>
+                    <div className="m-3 text-center mt-5" >
 
-
-
-
-
-
-            <div className="mt-5 row m-2">
-
-                {
-                    obj1.map((val, ind) => (
-                        <Link to={"/videos/"+val.id} key={ind} className="col-md-4  p-2">
+                        <marquee behavior="alternate"><h1><q>Qu'est-ce que tu vas apprendre aujourd'hui ?!</q></h1></marquee>
 
 
-                            <div>
-                                <div className="card card-block text-center p-2 w-100">
-                                    <div className="card-header">
+                    </div>
 
-                                        <img className="rounded-2" src={val.imageSource} alt={val.title} />
-                                    </div>
+                    <input className='form-control p-3 text-center text-primary  rounded-5 border-2 w-75 align-self-center ' type='text' placeholder="Exemple :  PHP CS5 JS ..." />
+                    <div className="conatiner d-flex flex-column justify-content-center p-5 mt-0 m-5">
 
-                                    <div className="card-body">
+                        <button className="btn btn-outline-success text-light border-light border-3 w-25 align-self-center rounded-5">Rechercher</button>
+                    </div>
+                    <div className="row mx-5 mb-3 text-light  bold ">
+                        <div className="col-3">
+                        <h2>50 courses</h2>
+                        </div>
+                        <div className="col-3">
+                        <h2>50 Etudiant</h2>
+                        </div>
+                        <div className="col-3">
+                        <h2>5000 Heures</h2>
+                        </div>
+                        <div className="col-3">
+                        <h2>5 Demains</h2>
+                        </div>
+                    </div>
+                </div>
 
-                                        <h5 className="card-title mt-2 mb-2  mt-3">{val.title}</h5>
-                                        <p className="card-text ">
-                                            {val.description}
-                                            <br />
-                                            <span className="text-bold text-success">length : {val.lengthFormation}</span><br />
-                                            <span className="text-bold text-success">Nombre Videos : {val.nombreVideos}</span>
-                                        </p>
-                                        <div className="">
-                                            <button className="btn btn-primary">Voir Plus</button>
+
+
+                <hr className="" /><h1 className="align-self-center mb-5 text-bold"><q>les cours les plus vues</q></h1>
+
+
+
+
+
+
+                <div className="row p-5">
+
+                    {
+                        obj1.map((val, ind) => (
+                            <Link to={"/videos/" + val.id} key={ind} className="col-md-4  p-2">
+
+
+                                <div>
+                                    <div className="card card-block text-center p-2 w-100">
+                                        <div className="card-header">
+
+                                            <img className="rounded-2" src={val.imageSource} alt={val.title} />
+                                        </div>
+
+                                        <div className="card-body">
+
+                                            <h5 className="card-title mt-2 mb-2  mt-3">{val.title}</h5>
+                                            <p className="card-text ">
+                                                {val.description}
+                                                <br />
+                                                <span className="text-bold text-success">length : {val.lengthFormation}</span><br />
+                                                <span className="text-bold text-success">Nombre Videos : {val.nombreVideos}</span>
+                                            </p>
+                                            <div className="">
+                                                <button className="btn btn-primary">Voir Plus</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </Link>
+                            </Link>
 
-                    ))
-                }
-
+                        ))
+                    }
 
 
+
+                </div>
             </div>
+            <Footer/>
         </div>
     )
 }
