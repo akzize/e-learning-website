@@ -1,31 +1,36 @@
-import React from 'react'
-import Accueil from './Chaines/Accueil'
-import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+
+
+
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import Accueil from './Chaines/Accueil';
 import Videos from './Chaines/Videos';
+import Login from './Chaines/Login';
 
-
+const App=()=>{
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <Accueil/>,
+    path: "/accueil",
+    element: <Accueil />,
   },
   {
     path: "/videos/:id",
     element: <Videos />,
   },
-  
+  {
+    path: "/",
+    element: <Login />
+  }
+
 ]);
 
-const App = () => {
-  return (
-    <div className='App text-light'>
-      <RouterProvider router={router}>
-        
-       {/* <Accueil/> */}
-      </RouterProvider>
-    </div>
-  )
+
+return (
+  <div className='App text-light'>
+    <RouterProvider router={router}>
+    </RouterProvider>
+  </div>
+)
 }
 
 export default App

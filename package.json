@@ -13,6 +13,7 @@
     "@mui/material": "^5.15.2",
     "@tinymce/tinymce-react": "^4.3.2",
     "axios": "^1.6.2",
+    "firebase": "^10.7.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-player": "^2.14.1",

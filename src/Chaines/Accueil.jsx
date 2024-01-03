@@ -74,7 +74,6 @@ const Accueil = () => {
 
     return (
         <div >
-            <Header />
             <div className='conatiner d-flex flex-column justify-content-center pt-5 '>
 
 
@@ -110,7 +109,7 @@ const Accueil = () => {
 
 
 
-                <hr className="" /><h1 className="align-self-center mb-5 text-bold"><q>les cours les plus vues</q></h1>
+                <hr className="" /><h1 className="align-self-center mb-1 text-bold text-info"><q>les cours les plus vues</q></h1>
 
 
 
@@ -155,7 +154,6 @@ const Accueil = () => {
 
                 </div>
             </div>
-            <Footer/>
         </div>
     )
 }

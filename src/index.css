@@ -1,47 +1,51 @@
-.container1{
+.container1 {
   background-image: url("https://www.andromo.com/wp-content/uploads/2022/01/01-Learn-How-to-Code-a-Mobile-app.jpg");
-  background-repeat:  round;
-  backdrop-filter:calc(100);
+  background-repeat: round;
+  backdrop-filter: calc(100);
 
 }
 
 /* le style des cards */
 
-img{
-  height:150px;
-  width:100%;
+img {
+  height: 150px;
+  width: 100%;
 }
 
 /* div [class^="col-"]{
   padding-left:5px;
   padding-right:5px;
 } */
-.card{
-  transition:0.5s;
-  cursor:pointer;
-}
-.card-title{  
-  font-size:15px;
-  transition:1s;
-  cursor:pointer;
-}
-.card-title i{  
-  font-size:15px;
-  transition:1s;
-  cursor:pointer;
-  color:#ffa710
-}
-.card-title i:hover{
-  transform: scale(1.25) rotate(100deg); 
-  color:#18d4ca;
-  
-}
-.card:hover{
-  transform: scale(1.05);
-  box-shadow: 10px 10px 15px rgba(0,0,0,0.3);
+.card {
+  transition: 0.5s;
+  cursor: pointer;
 }
 
-.card{
+.card-title {
+  font-size: 15px;
+  transition: 1s;
+  cursor: pointer;
+}
+
+.card-title i {
+  font-size: 15px;
+  transition: 1s;
+  cursor: pointer;
+  color: #ffa710
+}
+
+.card-title i:hover {
+  transform: scale(1.25) rotate(100deg);
+  color: #18d4ca;
+
+}
+
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.3);
+}
+
+.card {
   height: 400px;
   box-shadow: 5px 2px linear-gradient(8deg, rgb(206, 113, 7) 15%, rgb(184, 158, 11) 66%);
 
@@ -49,16 +53,18 @@ img{
   background: rgb(167, 168, 168);
   /* background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgb(51, 29, 253) 50%, rgba(252,176,69,1) 100%); */
 }
-.card-video{
+
+.card-video {
   height: 400px;
   box-shadow: 5px 2px linear-gradient(8deg, rgb(206, 113, 7) 15%, rgb(184, 158, 11) 66%);
-color: black !important;
+  color: black !important;
   filter: drop-shadow(5px 2px 4px #24b8e6);
   background: rgb(216, 221, 223);
   /* background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgb(51, 29, 253) 50%, rgba(252,176,69,1) 100%); */
 }
 
-.card::before, .card::after {
+.card::before,
+.card::after {
   position: absolute;
   top: 0;
   right: 0;
@@ -70,21 +76,31 @@ color: black !important;
   content: '';
   pointer-events: none;
 }
+
 .card::before {
   transform-origin: left top;
 }
+
 .card::after {
   transform-origin: right bottom;
 }
-.card:hover::before, .card:hover::after, .card:focus::before, .card:focus::after {
+
+.card:hover::before,
+.card:hover::after,
+.card:focus::before,
+.card:focus::after {
   transform: scale3d(1, 1, 1);
 }
-.card-video:hover::before, .card-video:hover::after, .card-video:focus::before, .card-video:focus::after {
+
+.card-video:hover::before,
+.card-video:hover::after,
+.card-video:focus::before,
+.card-video:focus::after {
   transform: scale3d(1, 1, 1);
 }
 
 /* le style du composant pricipale App */
-.App{
+.App {
   color: black;
   background-color: rgba(0, 0, 0, 0.05);
 }
@@ -96,9 +112,9 @@ color: black !important;
 
   color: #70869d;
   letter-spacing: .1em;
-  text-shadow: 
+  text-shadow:
 
-    0px 2px 0 #2c2c2c, 
+    0px 2px 0 #2c2c2c,
 
     8px 2px 3px rgba(100, 100, 100, 0.9);
 }
