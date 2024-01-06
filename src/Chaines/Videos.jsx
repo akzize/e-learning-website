@@ -3,13 +3,34 @@ import { Editor } from '@tinymce/tinymce-react';
 import { useParams } from 'react-router-dom'
 import CustomiseHook from './CustomiseHook'
 import ReactPlayer from 'react-player'
-
+import OpenAI from 'openai';
+import { db } from '../firebase-config';
+import { collection, getDocs } from 'firebase/firestore';
 
 const Videos = () => {
-    const [counter, setcounter] = useState(0)
-
+    const [notes, setnotes] = useState([])
+    const [question, Setquestion] = useState('');
+    const [response, Setresponse] = useState('');
     const [playlists, SetPlaylists] = useState([])
+
     const { id } = useParams()
+    const UsersCollectionRef = collection(db, "notes")
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const data = await getDocs(UsersCollectionRef)
+                setnotes(data.docs.map((elem) => ({ ...elem.data(), id: elem.id })))
+            } catch (error) {
+                console.error('Error fetching data from Firestore:', error);
+            }
+        };
+
+        fetchData();
+    }, [UsersCollectionRef]);
+
+    // console.log(notes);
+
 
     var options = {
         params: {
@@ -19,9 +40,9 @@ const Videos = () => {
         },
 
         headers: {
-            'X-RapidAPI-Key': '92b5603311msh4a7143f635bf4e8p10fcf6jsn9732cce7494f',
-            'X-RapidAPI-Host': 'youtube-v31.p.rapidapi.com'
-          }
+            'X-RapidAPI-Key': 'eabeba5b01mshd16ac2c9523c765p1803f9jsnb70070915978',
+            'X-RapidAPI-Host': 'youtube-v311.p.rapidapi.com'
+        }
     };
 
     const url = "https://youtube-v311.p.rapidapi.com/playlistItems/";
@@ -32,11 +53,47 @@ const Videos = () => {
     }, [id])
 
     let ved1 = playlists.items ? playlists.items[0].snippet.resourceId.videoId : null
-    console.log(ved1);
+    // console.log(ved1);
+
+
+
+
+
+
+    // useEffect(() => {
+    const openai = new OpenAI({
+        apiKey: your_api_key_gpt,
+        dangerouslyAllowBrowser: true,
+    });
+
+    async function main() {
+
+        Setquestion(notes.filter(elem=>elem.videoID==ved1).map(note => note.title).join(' - '))
+// console.log(question);
+
+        try {
+            
+            const completion = question &&  await openai.chat.completions.create({
+                messages: [{ role: 'system', content: `generer un resumer à partir de ces notes et commencer par en resumé de ses notes : ${question}` }],
+                model: 'gpt-3.5-turbo',
+            });
+
+            question && Setresponse(completion.choices[0].message.content);
+        } catch (error) {
+            console.error('Error fetching OpenAI completion:', error);
+        }
+    }
+
+    // main();
+    // }, []); 
+
+
+
+
 
     return (
         <div className='d-flex gap-3  p-2 jutify-content-center bg-info mt-5'>
-            <div className="col-md-9">
+            <div className="col-md-9 currentvideo">
                 <ReactPlayer
 
                     controls
@@ -52,10 +109,30 @@ const Videos = () => {
 
 
 
-                <textarea name=""  id="" className='w-100 h-25  p-1 text-bold fs-4' cols="30" rows="10"></textarea>
-                <button className="btn btn-warning">Add Note</button>
+                {/* <input type="text" onChange={(e) => Setquestion(e.target.value)} /> */}
+                <button onClick={main} className='btn btn-success w-25'>Voir le résumé</button>
+                <div className='border p-3 fw-bold bg-light rounded-2 m-2 text-dark fs-5'>
+                    <details>
+                        <summary>Votre Notes </summary>
+                        <ul>
+
+                            {notes.filter(elem=>elem.videoID==ved1).map((val, key) => (
+                                <li key={key}>{val.title}</li>
+                            ))}
+                        </ul>
+                    </details>
+
+                </div>
+                <div className='border p-3 fw-bold bg-light rounded-2 m-2 text-dark fs-5'>
+
+                    <details>
+                        <summary>Voir le résumé </summary>
+                        {response}
+                    </details>
+                </div>
 
             </div>
+
             <div className="col-md-3">
                 {playlists.items &&
                     playlists.items.map((play, ind) => (
