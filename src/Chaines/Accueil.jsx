@@ -5,7 +5,7 @@ import Header from "../Master/Header";
 import Footer from "../Master/Footer";
 
 const Accueil = () => {
-
+    // console.log(process.env);
 
     const obj1 = [
         {
