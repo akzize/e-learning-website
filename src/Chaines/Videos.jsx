@@ -7,7 +7,7 @@ import ReactPlayer from "react-player";
 import OPENAI_API_KEY from "../config/openai";
 import OpenAI from "openai";
 import { db } from "../firebase-config";
-import { collection, getDocs } from "firebase/firestore";
+import { addDoc, collection, getDocs } from "firebase/firestore";
 // bs5 compoenets
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
@@ -22,12 +22,32 @@ const Videos = () => {
 	const [question, Setquestion] = useState("");
 	const [response, setResponse] = useState("");
 	const [playlists, SetPlaylists] = useState([]);
+
+	// abdos modification
+	const [note, Setnote] = useState("");
+	const [currentvideo, Setcurrentvideo] = useState("9boMnm5X9ak");
 	
 	// action for showing the note form
 	const [showNoteForm, setShowNoteForm] = useState(false);
 
 	const { id } = useParams();
 	const UsersCollectionRef = collection(db, "notes");
+
+// -------------------add note to firebase-------------------
+const handleAddNote = async () => {
+	// alert()
+	// e.preventDefault()
+	try {
+		await addDoc(collection(db, "notes"), {
+			title: note,
+			videoID: currentvideo,
+		});
+		Setnote("");
+	} catch (err) {
+		alert(err);
+	}
+};
+// -------------------add note to firebase-------------------
 
 	useEffect(() => {
 		const fetchData = async () => {
