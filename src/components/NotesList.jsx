@@ -35,13 +35,14 @@ const NotesList = ({ notes , currentvideo }) => {
 	// 	// Add more dummy notes here...
 	// ];
 
-	const handleInputClick = async (id) => {
+	const handleInputClick = async (id,title) => {
 		// edit in database firebase
 		const input = document.getElementById(`${id}`);
-		setValue(input.value)
-		input.removeAttribute("disabled")
+		setValue(title)
+		input.classList.remove("d-none")
+		input.value=title
 		setActiveInput(true);
-		
+		// console.log(value);
 		// document.querySelector(`#${id}`).disabled = !activeInput;
 
 
@@ -73,7 +74,10 @@ const NotesList = ({ notes , currentvideo }) => {
 			console.log(err);
 		}
 		setActiveInput(false);
-		input.setAttribute("disabled", true)
+		// input.setAttribute("disabled", true)
+		input.classList.add("d-none")
+		setValue('')
+
 	}
 
 	const handleDeleteClick = async (id) => {
@@ -110,7 +114,7 @@ const NotesList = ({ notes , currentvideo }) => {
 								{!activeInput ? (
 									<FaPen
 										className="text-success "
-										onClick={() => handleInputClick(note.id)}
+										onClick={() => handleInputClick(note.id,note.title)}
 									/>
 								) : (
 									<FaSave onClick={() => handleSaveClick(note.id, note.videoID)} />
@@ -119,13 +123,16 @@ const NotesList = ({ notes , currentvideo }) => {
 							</div>
 						</div>
 						{/* <p>Note Content: {note.title}</p> */}
+						
+						<div>
+						{note.title}
+						</div>
 						<input
 							type="text"
-							value={note.title}
 							id={note.id}
-							className="form-control "
-							disabled
+							className="form-control d-none"
 							onChange={(e) => setValue(e.target.value)}
+							
 						/>
 					</div>
 				</div>
