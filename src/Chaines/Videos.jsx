@@ -25,7 +25,6 @@ const Videos = () => {
 	// abdos modification
 	const [note, Setnote] = useState("");
 	const [currentvideo, Setcurrentvideo] = useState("9boMnm5X9ak");
-
 	// action for showing the note form
 	const [showNoteForm, setShowNoteForm] = useState(false);
 
@@ -126,6 +125,11 @@ const Videos = () => {
 		}
 	}
 
+	const handleChangeVideo=(id)=>{
+		alert(id)
+
+	}
+
 	// main();
 	// }, []);
 
@@ -178,7 +182,7 @@ const Videos = () => {
 										setShowNoteForm={setShowNoteForm} currentvideo={currentvideo} db={db}
 									/>
 								)}
-								<NotesList notes={notes}/>
+								<NotesList notes={notes} />
 							</div>
 						</Tab>
 						<Tab eventKey="q&a" title="Ask Question">
@@ -218,7 +222,7 @@ const Videos = () => {
 			<div className="col-md-3">
 				{playlists.items &&
 					playlists.items.map((play, ind) => (
-						<div className="row m-0" key={ind}>
+						<div className="row m-0" key={ind} onClick={()=>handleChangeVideo(play.snippet.resourceId.videoId)}>
 							<img
 								className="col-md-7  rounded-2"
 								src={play?.snippet.thumbnails.high.url}

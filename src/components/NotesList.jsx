@@ -1,4 +1,4 @@
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, deleteField, doc, documentId, setDoc, updateDoc } from "firebase/firestore";
 import React, { useState } from "react";
 import { Badge, Button } from "react-bootstrap";
 import { BsPencil, BsTrash, BsTrash2Fill, BsTrashFill } from "react-icons/bs";
@@ -6,7 +6,7 @@ import { FaPen, FaSave } from "react-icons/fa";
 import { Node } from "slate";
 import { db } from "../firebase-config";
 
-const NotesList = ({notes}) => {
+const NotesList = ({ notes }) => {
 	// for edited note
 	const [value, setValue] = useState('');
 	// active input
@@ -37,26 +37,30 @@ const NotesList = ({notes}) => {
 
 	const handleInputClick = async (id) => {
 		// edit in database firebase
+		const input = document.getElementById(`${id}`);
+		input.removeAttribute("disabled")
 		setActiveInput(true);
-		document.querySelector(`#${id}`).disabled = !activeInput;
-		
+		// document.querySelector(`#${id}`).disabled = !activeInput;
+
 
 
 	}
 
-	const handleSaveClick = async (id) => {
+	const handleSaveClick = async (id, videoID) => {
 		// edit in database firebase
+		const input = document.getElementById(`${id}`);
+
 		try {
 			const doc1 = {
 				title: value,
-				videoID: "updated",
+				videoID: videoID,
 			};
 
 			const coll = collection(db, "notes");
 
 			const docRef = doc(coll, id);
 
-			console.log(docRef);
+			// console.log(docRef);
 			await setDoc(docRef, doc1);
 			// 	title: content,
 			// 	videoID: currentvideo,
@@ -67,6 +71,17 @@ const NotesList = ({notes}) => {
 			console.log(err);
 		}
 		setActiveInput(false);
+		input.setAttribute("disabled", true)
+	}
+
+	const handleDeleteClick = async (id) => {
+		if (confirm('voulez-vous supprimer cette note')) {
+
+			await deleteDoc(doc(db, "notes", id));
+
+
+		}
+
 	}
 
 	return (
@@ -93,9 +108,9 @@ const NotesList = ({notes}) => {
 										onClick={() => handleInputClick(note.id)}
 									/>
 								) : (
-									<FaSave onClick={() => handleSaveClick(note.id)} />
+									<FaSave onClick={() => handleSaveClick(note.id, note.videoID)} />
 								)}
-								<BsTrashFill className="text-danger" />
+								<BsTrashFill className="text-danger" onClick={() => handleDeleteClick(note.id)} />
 							</div>
 						</div>
 						{/* <p>Note Content: {note.title}</p> */}
@@ -103,7 +118,7 @@ const NotesList = ({notes}) => {
 							type="text"
 							value={note.title}
 							id={note.id}
-							className="form-control bg-dark text-white border-0 "
+							className="form-control "
 							disabled
 							onChange={(e) => setValue(e.target.value)}
 						/>
