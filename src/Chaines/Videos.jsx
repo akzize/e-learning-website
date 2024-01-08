@@ -42,7 +42,7 @@ const Videos = () => {
         },
 
         headers: {
-            'X-RapidAPI-Key': 'eabeba5b01mshd16ac2c9523c765p1803f9jsnb70070915978',
+            'X-RapidAPI-Key': '',
             'X-RapidAPI-Host': 'youtube-v311.p.rapidapi.com'
         }
     };
@@ -64,7 +64,7 @@ const Videos = () => {
 
     // useEffect(() => {
     const openai = new OpenAI({
-        apiKey: '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',
+        apiKey: '',
         dangerouslyAllowBrowser: true,
     });
 
