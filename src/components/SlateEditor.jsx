@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useCallback } from "react";
-import { createEditor, Transforms, Editor, Text } from "slate";
+import { createEditor, Transforms, Editor, Text, Node } from "slate";
 import { Slate, Editable, withReact } from "slate-react";
 
 // icons
@@ -12,13 +12,45 @@ import {
 	FaItalic,
 	FaListUl,
 } from "react-icons/fa";
+import { addDoc, collection } from "firebase/firestore";
+import { db } from "../firebase-config";
 
-function SlateEditor({ setShowNoteForm }) {
+function SlateEditor({ setShowNoteForm, currentvideo }) {
 	const editor = useMemo(() => withReact(createEditor()), []);
+
+	const initialValue = [
+		{
+			type: "paragraph",
+			children: [{ text: "A line of text in a paragraph." }],
+		},
+	];
 	const [value, setValue] = useState(initialValue);
 
 	const renderElement = useCallback((props) => <Element {...props} />, []);
 	const renderLeaf = useCallback((props) => <Leaf {...props} />, []);
+
+	// -------------------add note to firebase-------------------
+	const handleAddNote = async () => {
+		// alert()
+		// e.preventDefault()
+		// const content = Node.string(value);
+		// console.log(Node.string(value));
+		const content = value.map((node) => Node.string(node)).join("\n");
+		// console.log(textContent);
+		try {
+			await addDoc(collection(db, "notes"), {
+				title: content,
+				videoID: currentvideo,
+			});
+			setValue("");
+		} catch (err) {
+			// alert(err);
+			console.log(err);
+		}
+		setShowNoteForm(false)
+
+	};
+	// -------------------add note to firebase-------------------
 
 	return (
 		<div className="p-1 my-1">
@@ -84,7 +116,12 @@ function SlateEditor({ setShowNoteForm }) {
 				</Slate>
 			</div>
 			<div className="actions float-end p-2 d-flex gap-2">
-				<button className="btn btn-primary rounded-0 ">Save</button>
+				<button
+					className="btn btn-primary rounded-0 "
+					onClick={handleAddNote}
+				>
+					Save
+				</button>
 				<button
 					className="btn btn-secondary rounded-0 "
 					onClick={() => setShowNoteForm(false)}
@@ -199,12 +236,5 @@ const Leaf = ({ attributes, children, leaf }) => {
 
 	return <span {...attributes}>{children}</span>;
 };
-
-const initialValue = [
-	{
-		type: "paragraph",
-		children: [{ text: "A line of text in a paragraph." }],
-	},
-];
 
 export default SlateEditor;

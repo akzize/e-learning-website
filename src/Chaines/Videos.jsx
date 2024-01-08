@@ -16,7 +16,6 @@ import SlateEditor from "../components/SlateEditor";
 import NotesList from "../components/NotesList";
 import ChatComponent from "../components/ChatSection";
 
-
 const Videos = () => {
 	const [notes, setnotes] = useState([]);
 	const [question, Setquestion] = useState("");
@@ -26,28 +25,28 @@ const Videos = () => {
 	// abdos modification
 	const [note, Setnote] = useState("");
 	const [currentvideo, Setcurrentvideo] = useState("9boMnm5X9ak");
-	
+
 	// action for showing the note form
 	const [showNoteForm, setShowNoteForm] = useState(false);
 
 	const { id } = useParams();
 	const UsersCollectionRef = collection(db, "notes");
 
-// -------------------add note to firebase-------------------
-const handleAddNote = async () => {
-	// alert()
-	// e.preventDefault()
-	try {
-		await addDoc(collection(db, "notes"), {
-			title: note,
-			videoID: currentvideo,
-		});
-		Setnote("");
-	} catch (err) {
-		alert(err);
-	}
-};
-// -------------------add note to firebase-------------------
+	// -------------------add note to firebase-------------------
+	const handleAddNote = async () => {
+		// alert()
+		// e.preventDefault()
+		try {
+			await addDoc(collection(db, "notes"), {
+				title: note,
+				videoID: currentvideo,
+			});
+			Setnote("");
+		} catch (err) {
+			alert(err);
+		}
+	};
+	// -------------------add note to firebase-------------------
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -62,9 +61,9 @@ const handleAddNote = async () => {
 		};
 
 		fetchData();
+		// console.log(notes);
 	}, [UsersCollectionRef]);
 
-	// console.log(notes);
 
 	var options = {
 		params: {
@@ -176,11 +175,10 @@ const handleAddNote = async () => {
 									</button>
 								) : (
 									<SlateEditor
-										setShowNoteForm={setShowNoteForm}
+										setShowNoteForm={setShowNoteForm} currentvideo={currentvideo} db={db}
 									/>
-									
 								)}
-								<NotesList />
+								<NotesList notes={notes}/>
 							</div>
 						</Tab>
 						<Tab eventKey="q&a" title="Ask Question">

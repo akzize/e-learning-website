@@ -33,7 +33,10 @@ const Login = () => {
 
     useEffect(() => {
         const getUsersData = async () => {
-            const data = await getDocs(UsersCollectionRef, "ofIsC0czrbLyFXPKvQz2")
+            const data = await getDocs(
+				UsersCollectionRef,
+				"xkM9FP7VSlPcGHfCyphh"
+			);
             setUsers(data.docs.map((elem) => ({ ...elem.data(), id: elem.id })))
         }
 
