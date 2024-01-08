@@ -3,6 +3,8 @@ import { Editor } from "@tinymce/tinymce-react";
 import { useParams } from "react-router-dom";
 import CustomiseHook from "./CustomiseHook";
 import ReactPlayer from "react-player";
+
+import OPENAI_API_KEY from "../config/openai";
 import OpenAI from "openai";
 import { db } from "../firebase-config";
 import { collection, getDocs } from "firebase/firestore";
@@ -11,13 +13,18 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import { MdAddCircle } from "react-icons/md";
 import SlateEditor from "../components/SlateEditor";
+import NotesList from "../components/NotesList";
+import ChatComponent from "../components/ChatSection";
 
 
 const Videos = () => {
 	const [notes, setnotes] = useState([]);
 	const [question, Setquestion] = useState("");
-	const [response, Setresponse] = useState("");
+	const [response, setResponse] = useState("");
 	const [playlists, SetPlaylists] = useState([]);
+	
+	// action for showing the note form
+	const [showNoteForm, setShowNoteForm] = useState(false);
 
 	const { id } = useParams();
 	const UsersCollectionRef = collection(db, "notes");
@@ -68,7 +75,7 @@ const Videos = () => {
 
 	// useEffect(() => {
 	const openai = new OpenAI({
-		apiKey: "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",
+		apiKey: OPENAI_API_KEY,
 		dangerouslyAllowBrowser: true,
 	});
 
@@ -94,7 +101,7 @@ const Videos = () => {
 					model: "gpt-3.5-turbo",
 				}));
 
-			question && Setresponse(completion.choices[0].message.content);
+			question && setResponse(completion.choices[0].message.content);
 		} catch (error) {
 			console.error("Error fetching OpenAI completion:", error);
 		}
@@ -104,7 +111,7 @@ const Videos = () => {
 	// }, []);
 
 	return (
-		<div className="d-flex gap-3  p-2 jutify-content-center bg-info mt-5">
+		<div className="d-flex gap-3  p-2 jutify-content-center bg-dark mt-5">
 			<div className="col-md-9 currentvideo">
 				<ReactPlayer
 					controls
@@ -113,11 +120,11 @@ const Videos = () => {
 				/>
 				<div className="ved-options">
 					<Tabs
-						defaultActiveKey="profile"
+						defaultActiveKey="overview"
 						id="uncontrolled-tab-example"
-						className="mb-3"
+						className="my-3"
 					>
-						<Tab eventKey="overview" title="Overview">
+						<Tab eventKey="overview" title="Overview" className="">
 							<div className="text-bold text-light text-header bg-dark rounded-1 my-2 p-3">
 								<h3>test title</h3>
 								et nesciunt! Assumenda sed reprehenderit ducimus
@@ -134,21 +141,30 @@ const Videos = () => {
 							</div>
 						</Tab>
 						<Tab eventKey="notes" title="Notes">
-							<div className="editor"></div>
 							<div className="notes-list">
-								<div className="border d-flex justify-content-between align-items-center align-content-center">
-									<p className="d-flex justify-content-between align-items-center align-content-center">
-										add new note at <span className="">00:00</span>
-									</p>
-									{/* <i className="bi bi-plus-circle-fill"></i> */}
-									<MdAddCircle />
-								</div>
-
-								<SlateEditor />
+								{!showNoteForm ? (
+									<button
+										onClick={() => setShowNoteForm(true)}
+										className="d-flex justify-content-between p-2 border align-content-center align-items-center bg-secondary text-dark fw-bolder text-capitalize w-100"
+									>
+										<span className="align-middle ">
+											add new note at{" "}
+											<span className=""> 00:00</span>
+										</span>
+										{/* <i className="bi bi-plus-circle-fill"></i> */}
+										<MdAddCircle className="fs-3 " />
+									</button>
+								) : (
+									<SlateEditor
+										setShowNoteForm={setShowNoteForm}
+									/>
+									
+								)}
+								<NotesList />
 							</div>
 						</Tab>
 						<Tab eventKey="q&a" title="Ask Question">
-							Tab content for Contact
+							<ChatComponent />
 						</Tab>
 					</Tabs>
 				</div>
