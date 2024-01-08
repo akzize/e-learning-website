@@ -22,30 +22,22 @@ const Videos = () => {
 	const [response, setResponse] = useState("");
 	const [playlists, SetPlaylists] = useState([]);
 
+	// chatgpt resume 
+
+	const [questionResume, SetquestionResume] = useState("");
+	const [Resume, SetResume] = useState("");
+
+
+
 	// abdos modification
 	const [note, Setnote] = useState("");
-	const [currentvideo, Setcurrentvideo] = useState("9boMnm5X9ak");
+	const [currentvideo, Setcurrentvideo] = useState([]);
 	// action for showing the note form
 	const [showNoteForm, setShowNoteForm] = useState(false);
 
 	const { id } = useParams();
 	const UsersCollectionRef = collection(db, "notes");
 
-	// -------------------add note to firebase-------------------
-	const handleAddNote = async () => {
-		// alert()
-		// e.preventDefault()
-		try {
-			await addDoc(collection(db, "notes"), {
-				title: note,
-				videoID: currentvideo,
-			});
-			Setnote("");
-		} catch (err) {
-			alert(err);
-		}
-	};
-	// -------------------add note to firebase-------------------
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -71,10 +63,15 @@ const Videos = () => {
 			maxResults: "50",
 		},
 
+		// headers: {
+		// 	'X-RapidAPI-Key': 'eabeba5b01mshd16ac2c9523c765p1803f9jsnb70070915978',
+		// 	'X-RapidAPI-Host': 'youtube-v311.p.rapidapi.com'
+		// }
+
 		headers: {
-			"X-RapidAPI-Key": "",
-			"X-RapidAPI-Host": "youtube-v311.p.rapidapi.com",
-		},
+			'X-RapidAPI-Key': 'ba899c8261msh46e94315e69f522p11e3f0jsn0eae8ebd92fa',
+			'X-RapidAPI-Host': 'youtube-v311.p.rapidapi.com'
+		}
 	};
 
 	const url = "https://youtube-v311.p.rapidapi.com/playlistItems/";
@@ -86,10 +83,16 @@ const Videos = () => {
 			.then((res) => SetPlaylists(res));
 	}, [id]);
 
-	let ved1 = playlists.items
+	// useEffect(()=>{
+	// console.log(playlists);
+	const vid1 = playlists.items
 		? playlists.items[0].snippet.resourceId.videoId
 		: null;
-	// console.log(ved1);
+	// Setcurrentvideo(vid1)
+
+
+
+	// },[currentvideo])
 
 	// useEffect(() => {
 	const openai = new OpenAI({
@@ -98,37 +101,40 @@ const Videos = () => {
 	});
 
 	async function main() {
-		Setquestion(
-			notes
-				.filter((elem) => elem.videoID == ved1)
-				.map((note) => note.title)
-				.join(" - ")
+		SetquestionResume(
+			currentvideo.resourceId && currentvideo.resourceId.videoId
+				? notes
+					.filter((elem) => elem.videoID === currentvideo.resourceId.videoId)
+					.map((note) => note.title)
+					.join(" - ")
+				: ""
 		);
-		// console.log(question);
+		//   console.log(questionResume);
 
 		try {
 			const completion =
-				question &&
+				questionResume &&
 				(await openai.chat.completions.create({
 					messages: [
 						{
 							role: "system",
-							content: `generer un resumer à partir de ces notes et commencer par en resumé de ses notes : ${question}`,
+							content: `generer un resumer à partir de ces notes et un resume de max 10 ligne et qui englobe tous les points : ${questionResume}`,
 						},
 					],
 					model: "gpt-3.5-turbo",
 				}));
 
-			question && setResponse(completion.choices[0].message.content);
+			questionResume && SetResume(completion.choices[0].message.content);
 		} catch (error) {
 			console.error("Error fetching OpenAI completion:", error);
 		}
 	}
 
-	const handleChangeVideo=(id)=>{
-		alert(id)
+	const handleChangeVideo = (videoInfos) => {
+		Setcurrentvideo(videoInfos)
 
 	}
+	// console.log(currentvideo);
 
 	// main();
 	// }, []);
@@ -136,11 +142,11 @@ const Videos = () => {
 	return (
 		<div className="d-flex gap-3  p-2 jutify-content-center bg-dark mt-5">
 			<div className="col-md-9 currentvideo">
-				<ReactPlayer
+				{currentvideo && (<ReactPlayer
 					controls
 					className="react-player w-100"
-					url={`https://www.youtube.com/watch?v=${ved1}`}
-				/>
+					url={`https://www.youtube.com/watch?v=${currentvideo.resourceId ? currentvideo.resourceId.videoId : vid1}`}
+				/>)}
 				<div className="ved-options">
 					<Tabs
 						defaultActiveKey="overview"
@@ -149,21 +155,11 @@ const Videos = () => {
 					>
 						<Tab eventKey="overview" title="Overview" className="">
 							<div className="text-bold text-light text-header bg-dark rounded-1 my-2 p-3">
-								<h3>test title</h3>
-								et nesciunt! Assumenda sed reprehenderit ducimus
-								similique explicabo eligendi dolores cumque
-								magnam laudantium praesentium. Quod odio
-								voluptatibus perspiciatis impedit harum
-								pariatur, nemo facilis, aperiam asperiores
-								quidem ex beatae porro? Error porro libero autem
-								blanditiis, facere doloremque vitae culpa
-								laborum maiores aut magni. Voluptatem quae earum
-								fugit inventore assumenda. Quasi error optio
-								similique animi fugiat architecto voluptates,
-								recusandae praesentium eligendi.
+								<h4>{currentvideo ? currentvideo.title : "Introduction"}</h4>
+								{currentvideo.resourceId ? currentvideo.description : "Introduction"}
 							</div>
 						</Tab>
-						<Tab eventKey="notes" title="Notes">
+						<Tab eventKey="notes" title="Note !?">
 							<div className="notes-list">
 								{!showNoteForm ? (
 									<button
@@ -179,14 +175,23 @@ const Videos = () => {
 									</button>
 								) : (
 									<SlateEditor
-										setShowNoteForm={setShowNoteForm} currentvideo={currentvideo} db={db}
+										setShowNoteForm={setShowNoteForm} currentvideo={currentvideo.resourceId.videoId} db={db}
 									/>
 								)}
-								<NotesList notes={notes} />
+								<NotesList currentvideo={currentvideo.resourceId && currentvideo.resourceId.videoId} notes={notes} />
 							</div>
 						</Tab>
-						<Tab eventKey="q&a" title="Ask Question">
+						<Tab eventKey="q&a" title="Q&A">
 							<ChatComponent />
+						</Tab>
+						<Tab eventKey="resume" title="Résume des notes">
+							{/* <ChatComponent /> */}
+							<div className="d-flex justify-content-center m-2 flex-column">
+								{
+									Resume ? (<><div className="fs-5">{Resume}</div> <br /> <button onClick={main} className="btn btn-primary w-25 align-self-center">Regénérer</button></>) :
+										(<button onClick={main} className="btn btn-primary">Générer</button>)
+								}
+							</div>
 						</Tab>
 					</Tabs>
 				</div>
@@ -203,7 +208,7 @@ const Videos = () => {
                         <summary>Votre Notes </summary>
                         <ul>
 
-                            {notes.filter(elem=>elem.videoID==ved1).map((val, key) => (
+                            {notes.filter(elem=>elem.videoID==vid1).map((val, key) => (
                                 <li key={key}>{val.title}</li>
                             ))}
                         </ul>
@@ -222,7 +227,7 @@ const Videos = () => {
 			<div className="col-md-3">
 				{playlists.items &&
 					playlists.items.map((play, ind) => (
-						<div className="row m-0" key={ind} onClick={()=>handleChangeVideo(play.snippet.resourceId.videoId)}>
+						<div className="row m-0" key={ind} onClick={() => handleChangeVideo(play.snippet)}>
 							<img
 								className="col-md-7  rounded-2"
 								src={play?.snippet.thumbnails.high.url}

@@ -35,7 +35,7 @@ const Login = () => {
         const getUsersData = async () => {
             const data = await getDocs(
 				UsersCollectionRef,
-				"xkM9FP7VSlPcGHfCyphh"
+				"pN1EsxYk2VTmJSR2sYAR"
 			);
             setUsers(data.docs.map((elem) => ({ ...elem.data(), id: elem.id })))
         }

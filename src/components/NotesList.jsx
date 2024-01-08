@@ -6,7 +6,7 @@ import { FaPen, FaSave } from "react-icons/fa";
 import { Node } from "slate";
 import { db } from "../firebase-config";
 
-const NotesList = ({ notes }) => {
+const NotesList = ({ notes , currentvideo }) => {
 	// for edited note
 	const [value, setValue] = useState('');
 	// active input
@@ -38,8 +38,10 @@ const NotesList = ({ notes }) => {
 	const handleInputClick = async (id) => {
 		// edit in database firebase
 		const input = document.getElementById(`${id}`);
+		setValue(input.value)
 		input.removeAttribute("disabled")
 		setActiveInput(true);
+		
 		// document.querySelector(`#${id}`).disabled = !activeInput;
 
 
@@ -84,10 +86,13 @@ const NotesList = ({ notes }) => {
 
 	}
 
+	// console.log(currentvideo)
 	return (
 		<div>
 			<h1 className="h5 my-4">Notes:</h1>
-			{notes.map((note) => (
+			{
+			
+			currentvideo && notes.filter((elem)=>elem.videoID==currentvideo).map((note) => (
 				<div
 					key={note.id}
 					className="note-card my-1 p-1 d-flex align-items-start gap-2 rounded rounded-1 "
