@@ -5,13 +5,15 @@ import CustomiseHook from './CustomiseHook'
 import ReactPlayer from 'react-player'
 import OpenAI from 'openai';
 import { db } from '../firebase-config';
-import { collection, getDocs } from 'firebase/firestore';
+import { addDoc, collection, getDocs } from 'firebase/firestore';
 
 const Videos = () => {
     const [notes, setnotes] = useState([])
     const [question, Setquestion] = useState('');
     const [response, Setresponse] = useState('');
     const [playlists, SetPlaylists] = useState([])
+    const [note, Setnote] = useState("")
+    const [currentvideo, Setcurrentvideo] = useState('9boMnm5X9ak')
 
     const { id } = useParams()
     const UsersCollectionRef = collection(db, "notes")
@@ -62,18 +64,18 @@ const Videos = () => {
 
     // useEffect(() => {
     const openai = new OpenAI({
-        apiKey: your_api_key_gpt,
+        apiKey: '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',
         dangerouslyAllowBrowser: true,
     });
 
     async function main() {
 
-        Setquestion(notes.filter(elem=>elem.videoID==ved1).map(note => note.title).join(' - '))
-// console.log(question);
+        Setquestion(notes.filter(elem => elem.videoID == ved1).map(note => note.title).join(' - '))
+        // console.log(question);
 
         try {
-            
-            const completion = question &&  await openai.chat.completions.create({
+
+            const completion = question && await openai.chat.completions.create({
                 messages: [{ role: 'system', content: `generer un resumer à partir de ces notes et commencer par en resumé de ses notes : ${question}` }],
                 model: 'gpt-3.5-turbo',
             });
@@ -86,6 +88,50 @@ const Videos = () => {
 
     // main();
     // }, []); 
+    // useEffect(()=>{
+
+
+
+
+
+    // const handleAddNote = () => {
+    //     try {
+    //       const data = {
+    //         title: note,
+    //         videoID: currentvideo
+    //       };
+
+    //       const UsersCollectionRef = collection(db, "notes");
+
+    //       // Ajouter un nouveau document à la collection "notes"
+    //       const docRef =  addDoc(UsersCollectionRef, data);
+
+    //       console.log("Document written with ID:", docRef.id);
+    //     } catch (error) {
+    //       console.error("Error adding document:", error);
+    //     }
+
+    //   };
+
+
+
+    const handleAddNote = async () => {
+        // alert()
+        // e.preventDefault()
+        try {
+            await addDoc(collection(db, 'notes'), {
+                title: note,
+                videoID: currentvideo
+            })
+            Setnote("")
+        } catch (err) {
+            alert(err)
+        }
+    }
+
+
+
+    // },[])
 
 
 
@@ -107,29 +153,43 @@ const Videos = () => {
 
                 </div>
 
+                <div>
+
+                    <input type="text" onChange={(e) => { Setnote(e.target.value) }} />
+                    <button onClick={handleAddNote}>Add note</button>
+                </div>
+
 
 
                 {/* <input type="text" onChange={(e) => Setquestion(e.target.value)} /> */}
                 <button onClick={main} className='btn btn-success w-25'>Voir le résumé</button>
-                <div className='border p-3 fw-bold bg-light rounded-2 m-2 text-dark fs-5'>
-                    <details>
-                        <summary>Votre Notes </summary>
-                        <ul>
+                {
+                    notes && (
+                        <div className='border p-3 fw-bold bg-light rounded-2 m-2 text-dark fs-5'>
+                            <details>
+                                <summary>Votre Notes </summary>
+                                <ul>
 
-                            {notes.filter(elem=>elem.videoID==ved1).map((val, key) => (
-                                <li key={key}>{val.title}</li>
-                            ))}
-                        </ul>
-                    </details>
+                                    {notes.filter(elem => elem.videoID == ved1).map((val, key) => (
+                                        <li key={key}>{val.title}</li>
+                                    ))}
+                                </ul>
+                            </details>
 
-                </div>
-                <div className='border p-3 fw-bold bg-light rounded-2 m-2 text-dark fs-5'>
+                        </div>
+                    )
+                }
+                {
+                    response && (
+                        <div className='border p-3 fw-bold bg-light rounded-2 m-2 text-dark fs-5'>
 
-                    <details>
-                        <summary>Voir le résumé </summary>
-                        {response}
-                    </details>
-                </div>
+                            <details>
+                                <summary>Voir le résumé </summary>
+                                {response}
+                            </details>
+                        </div>
+                    )
+                }
 
             </div>
 
